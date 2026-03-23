@@ -40,11 +40,14 @@ export default function Alerts() {
 
   useEffect(() => { fetchAlerts(); }, []);
 
-  const markRead = async (id: string) => {
+  const handleDelete = async (id: string) => {
     try {
-      await alertsApi.markRead(id);
-      setAlerts((prev) => prev.map((a) => (a._id === id ? { ...a, isRead: true } : a)));
-    } catch {}
+      await alertsApi.remove(id);
+      setAlerts((prev) => prev.filter((a) => a._id !== id));
+      toast({ title: "Alert deleted" });
+    } catch {
+      toast({ title: "Failed to delete alert", variant: "destructive" });
+    }
   };
 
   const severityColor = (severity: string) => {
@@ -82,9 +85,9 @@ export default function Alerts() {
           {alerts.map((alert, i) => (
             <Card
               key={alert._id}
-              className={`animate-fade-in cursor-pointer transition-opacity ${alert.isRead ? "opacity-60" : ""}`}
+              className="animate-fade-in cursor-pointer transition-opacity hover:opacity-80"
               style={{ animationDelay: `${i * 60}ms` }}
-              onClick={() => !alert.isRead && markRead(alert._id)}
+              onClick={() => handleDelete(alert._id)}
             >
               <CardContent className="p-4 flex items-start gap-4">
                 <div className={`h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
@@ -100,12 +103,11 @@ export default function Alerts() {
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-medium text-foreground">{alert.productName}</p>
                     <Badge variant={severityColor(alert.severity)}>{alert.severity}</Badge>
-                    {alert.isRead && <Badge variant="outline" className="text-xs">Read</Badge>}
                   </div>
                   <p className="text-sm text-muted-foreground">{alert.message}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {new Date(alert.createdAt).toLocaleDateString("en-IN")}
-                    {!alert.isRead && <span className="ml-2 text-primary">• Click to mark as read</span>}
+                    <span className="ml-2 text-destructive">• Click to delete</span>
                   </p>
                 </div>
               </CardContent>

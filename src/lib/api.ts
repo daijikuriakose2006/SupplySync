@@ -109,7 +109,7 @@ export const recommendationsApi = {
 export const alertsApi = {
   list: () => api.get('/alerts'),
   check: () => api.post('/alerts/check'),
-  markRead: (id: string) => api.put(`/alerts/${id}/read`),
+  remove: (id: string) => api.delete(`/alerts/${id}`),
   markAllRead: () => api.put('/alerts/read-all'),
 };
 

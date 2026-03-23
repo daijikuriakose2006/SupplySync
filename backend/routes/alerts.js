@@ -30,7 +30,7 @@ router.post('/check', async (req, res, next) => {
     for (const product of products) {
       // Low stock alert
       if (product.stockQuantity < LOW_STOCK_THRESHOLD) {
-        const exists = await Alert.findOne({ type: 'low_stock', product: product._id, isRead: false });
+        const exists = await Alert.findOne({ type: 'low_stock', product: product._id });
         if (!exists) {
           const severity = product.stockQuantity <= 5 ? 'high' : product.stockQuantity <= 7 ? 'medium' : 'low';
           await Alert.create({
@@ -46,7 +46,7 @@ router.post('/check', async (req, res, next) => {
 
       // Expiry alert
       if (product.expiryDate && new Date(product.expiryDate) <= expiryThreshold) {
-        const exists = await Alert.findOne({ type: 'expiry', product: product._id, isRead: false });
+        const exists = await Alert.findOne({ type: 'expiry', product: product._id });
         if (!exists) {
           const daysUntilExpiry = Math.ceil((new Date(product.expiryDate) - now) / (1000 * 60 * 60 * 24));
           const severity = daysUntilExpiry <= 2 ? 'high' : daysUntilExpiry <= 4 ? 'medium' : 'low';
@@ -67,12 +67,12 @@ router.post('/check', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// PUT /api/alerts/:id/read — mark as read
-router.put('/:id/read', async (req, res, next) => {
+// DELETE /api/alerts/:id — delete alert
+router.delete('/:id', async (req, res, next) => {
   try {
-    const alert = await Alert.findByIdAndUpdate(req.params.id, { isRead: true }, { new: true });
+    const alert = await Alert.findByIdAndDelete(req.params.id);
     if (!alert) return res.status(404).json({ message: 'Alert not found' });
-    res.json(alert);
+    res.json({ message: 'Alert deleted' });
   } catch (err) { next(err); }
 });
 
