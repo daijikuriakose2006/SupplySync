@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Plus, Search, Edit, Trash2, Package, RefreshCw } from "lucide-react";
-import { productsApi } from "@/lib/api";
+import { productsApi, gstApi } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 interface Product {
@@ -34,12 +34,14 @@ export default function Inventory() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const [pRes, cRes] = await Promise.all([
+      const [pRes, cRes, gRes] = await Promise.all([
         productsApi.list({ search: search || undefined }),
         productsApi.categories(),
+        gstApi.list(),
       ]);
       setProducts(pRes.data.products);
-      setCategories(cRes.data);
+      const gstCategories = gRes.data.map((g: any) => g.category);
+      setCategories(Array.from(new Set([...cRes.data, ...gstCategories])));
     } catch {
       toast({ title: "Failed to load products", variant: "destructive" });
     } finally {
@@ -113,8 +115,12 @@ export default function Inventory() {
                     }
                     setDialogOpen(false);
                     // Refresh categories
-                    const cRes = await productsApi.categories();
-                    setCategories(cRes.data);
+                    const [cRes, gRes] = await Promise.all([
+                      productsApi.categories(),
+                      gstApi.list()
+                    ]);
+                    const gstCategories = gRes.data.map((g: any) => g.category);
+                    setCategories(Array.from(new Set([...cRes.data, ...gstCategories])));
                   } catch (err: any) {
                     toast({ title: "Error", description: err.response?.data?.message || "Failed to save", variant: "destructive" });
                   }
@@ -251,7 +257,7 @@ function ProductForm({
             onBlur={() => setTimeout(() => setShowCatDropdown(false), 200)}
             placeholder="Type or select..."
           />
-          {showCatDropdown && form.category && filteredCategories.length > 0 && (
+          {showCatDropdown && filteredCategories.length > 0 && (
             <div className="absolute z-50 w-full mt-1 bg-card border rounded-lg shadow-lg max-h-32 overflow-y-auto">
               {filteredCategories.map((cat) => (
                 <button
