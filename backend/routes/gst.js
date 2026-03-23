@@ -4,7 +4,7 @@ const GstRate = require('../models/GstRate');
 const auth = require('../middlewares/auth');
 const role = require('../middlewares/role');
 
-router.use(auth, role('admin'));
+router.use(auth);
 
 // GET /api/gst
 router.get('/', async (req, res, next) => {
@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // POST /api/gst — add or update
-router.post('/', async (req, res, next) => {
+router.post('/', role('admin'), async (req, res, next) => {
   try {
     const { category, percentage } = req.body;
     if (!category || percentage === undefined) {
@@ -35,7 +35,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // DELETE /api/gst/:category
-router.delete('/:category', async (req, res, next) => {
+router.delete('/:category', role('admin'), async (req, res, next) => {
   try {
     const rate = await GstRate.findOneAndDelete({ category: req.params.category });
     if (!rate) return res.status(404).json({ message: 'GST rate not found' });
