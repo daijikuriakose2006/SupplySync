@@ -4,7 +4,7 @@ const BillCharge = require('../models/BillCharge');
 const auth = require('../middlewares/auth');
 const role = require('../middlewares/role');
 
-router.use(auth, role('admin'));
+router.use(auth);
 
 // GET /api/bill-charges
 router.get('/', async (req, res, next) => {
@@ -14,8 +14,8 @@ router.get('/', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// POST /api/bill-charges
-router.post('/', async (req, res, next) => {
+// POST /api/bill-charges (admin only)
+router.post('/', role('admin'), async (req, res, next) => {
   try {
     const { name, percentage } = req.body;
     if (!name || percentage === undefined) {
@@ -33,8 +33,8 @@ router.post('/', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// PUT /api/bill-charges/:id
-router.put('/:id', async (req, res, next) => {
+// PUT /api/bill-charges/:id (admin only)
+router.put('/:id', role('admin'), async (req, res, next) => {
   try {
     const { percentage } = req.body;
     const pct = parseFloat(percentage);
@@ -45,8 +45,8 @@ router.put('/:id', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-// DELETE /api/bill-charges/:id
-router.delete('/:id', async (req, res, next) => {
+// DELETE /api/bill-charges/:id (admin only)
+router.delete('/:id', role('admin'), async (req, res, next) => {
   try {
     const charge = await BillCharge.findByIdAndDelete(req.params.id);
     if (!charge) return res.status(404).json({ message: 'Charge not found' });

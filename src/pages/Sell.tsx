@@ -38,13 +38,12 @@ export default function Sell() {
   const { toast } = useToast();
 
   useEffect(() => {
-    Promise.all([gstApi.list(), billChargesApi.list(), settingsApi.get()])
+    Promise.allSettled([gstApi.list(), billChargesApi.list(), settingsApi.get()])
       .then(([gRes, bRes, sRes]) => {
-        setGstRates(gRes.data);
-        setBillCharges(bRes.data);
-        setShopName(sRes.data.shopName || "My Shop");
-      })
-      .catch(() => {});
+        if (gRes.status === "fulfilled") setGstRates(gRes.value.data);
+        if (bRes.status === "fulfilled") setBillCharges(bRes.value.data);
+        if (sRes.status === "fulfilled") setShopName(sRes.value.data.shopName || "My Shop");
+      });
   }, []);
 
   // Search suggestions
