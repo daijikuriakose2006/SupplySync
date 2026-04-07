@@ -48,6 +48,12 @@ router.post('/login', async (req, res, next) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
+    // Mark as active (no longer first login) once they successfully log in
+    if (user.isFirstLogin) {
+      user.isFirstLogin = false;
+      await user.save();
+    }
+
     const token = generateToken(user);
     res.json({
       token,
