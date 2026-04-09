@@ -5,15 +5,22 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { alertsApi } from "@/lib/api";
+import { alertsApi, authApi } from "@/lib/api";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [userName, setUserName] = useState("");
 
-  // Get user's name initial from localStorage
-  const userName = localStorage.getItem("userName") || "";
   const initial = userName.trim().charAt(0).toUpperCase() || "?";
+
+  // Fetch user name from DB
+  useEffect(() => {
+    authApi.me().then((res) => {
+      setUserName(res.data.name || "");
+      localStorage.setItem("userName", res.data.name || "");
+    }).catch(() => {});
+  }, []);
 
   // Fetch real unread alert count
   const fetchAlertCount = async () => {
