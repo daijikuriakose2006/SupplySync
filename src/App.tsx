@@ -23,6 +23,9 @@ import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Wake up the Render backend immediately (free tier sleeps after inactivity)
+fetch('https://supplysync-ts7y.onrender.com/api/health').catch(() => {});
+
 const WithLayout = ({ children }: { children: React.ReactNode }) => (
   <AppLayout>{children}</AppLayout>
 );
