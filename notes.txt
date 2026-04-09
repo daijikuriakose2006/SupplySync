@@ -1,0 +1,269 @@
+================================================================================
+                         SUPPLYSYNC - PROJECT DOCUMENTATION
+                      Inventory & Demand Forecasting System
+================================================================================
+                         Prepared for Record / Academic Use
+                         Date: April 2026
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. PROJECT ABSTRACTION
+--------------------------------------------------------------------------------
+
+Project Title   : SupplySync - Inventory & Demand Forecasting System
+Live URL        : https://supply-sync-tau.vercel.app
+Repository      : daijikuriakose2006/SupplySync
+
+OVERVIEW:
+---------
+SupplySync is a full-stack web-based inventory and demand forecasting system
+designed for small to medium-scale retail businesses. The system provides
+real-time stock tracking, sales management, demand forecasting using historical
+data, GST management, and barcode-based product handling. It supports
+multi-role access (Admin and Staff) and allows businesses to manage their
+complete supply chain operations through a single integrated platform.
+
+PURPOSE:
+--------
+The primary goal of SupplySync is to digitize and streamline inventory
+management processes, reduce manual errors, automate low-stock alerts, enable
+data-driven restocking decisions through demand forecasting, and ensure
+compliance with GST (Goods and Services Tax) regulations.
+
+KEY MODULES:
+------------
+  a) Dashboard        - Real-time summary of sales, stock levels, and alerts.
+  b) Inventory        - Add, update, delete, and search products with
+                        category filters and barcode support.
+  c) Barcode Scanner  - Scan and identify products using barcode system.
+  d) Sales (Sell)     - Point-of-sale interface to bill customers, apply
+                        GST rates, and add bill charges.
+  e) Sales Report     - View and analyze past sales transactions with filters.
+  f) Demand Forecast  - Predict future stock requirements based on sales trends.
+  g) Recommendations  - Suggest restocking quantities for products.
+  h) Alerts           - Notify users about low-stock or out-of-stock items.
+  i) GST Management   - Configure and manage GST rates for different products.
+  j) Bill Charges     - Add custom charges (e.g., delivery, packing) to bills.
+  k) Staff Management - Admin can add, manage, and control staff access.
+  l) Settings         - Configure shop/business profile and preferences.
+
+USER ROLES:
+-----------
+  - Admin  : Full access to all modules including staff and settings.
+  - Staff  : Limited access to inventory, sales, and alerts.
+
+TARGET USERS:
+-------------
+  Small and medium retail shop owners, warehouse managers, and business
+  operators who need a lightweight yet powerful inventory control tool.
+
+
+--------------------------------------------------------------------------------
+2. SOFTWARE REQUIREMENTS
+--------------------------------------------------------------------------------
+
+A) FRONTEND (Client-Side):
+---------------------------
+  Framework        : React.js (v18.3.1) with TypeScript (v5.8.3)
+  Build Tool       : Vite (v5.4.19) with SWC plugin
+  Routing          : React Router DOM (v6.30.1)
+  State Management : TanStack React Query (v5.83.0)
+  UI Component Lib : Radix UI (Headless UI Components)
+  Styling          : Tailwind CSS (v3.4.17) with tailwindcss-animate
+  Forms            : React Hook Form (v7.61.1) + Zod (v3.25.76) for validation
+  Charts/Graphs    : Recharts (v2.15.4)
+  HTTP Client      : Axios (v1.13.6)
+  Icons            : Lucide React (v0.462.0)
+  Date Utilities   : date-fns (v3.6.0)
+  Toast/Alerts     : Sonner (v1.7.4)
+  Themes           : next-themes (v0.3.0)
+
+B) BACKEND (Server-Side):
+--------------------------
+  Runtime          : Node.js
+  Framework        : Express.js (v4.18.2)
+  Database ODM     : Mongoose (v8.3.4)
+  Authentication   : JSON Web Tokens - JWT (jsonwebtoken v9.0.2)
+  Password Hashing : bcryptjs (v2.4.3)
+  Cross-Origin     : CORS (v2.8.5)
+  Environment Vars : dotenv (v16.4.5)
+  Dev Server       : Nodemon (v3.1.0)
+
+C) DATABASE:
+------------
+  Database         : MongoDB (NoSQL Document Database)
+  Hosting          : MongoDB Atlas (Cloud)
+  Collections/Models:
+    - User         (Authentication, roles - admin/staff)
+    - Product      (Inventory items with barcode, stock, pricing)
+    - Sale         (Sales transactions with items, GST, charges)
+    - Alert        (Low-stock and out-of-stock notifications)
+    - GstRate      (GST percentage configurations)
+    - BillCharge   (Custom charge types for billing)
+    - Supplier     (Supplier information)
+    - ShopSettings (Shop profile and configuration)
+
+D) DEVELOPMENT TOOLS & TESTING:
+---------------------------------
+  Testing Framework : Vitest (v3.2.4)
+  Component Testing : @testing-library/react (v16.0.0)
+  E2E Testing       : Playwright (v1.57.0)
+  Linting           : ESLint (v9.32.0) with TypeScript ESLint
+  Package Manager   : npm / Bun
+
+E) DEPLOYMENT & HOSTING:
+--------------------------
+  Frontend Hosting  : Vercel (https://vercel.com)
+                      - Static site deployment via vercel.json config
+                      - SPA routing support with rewrites
+  Backend Hosting   : Render (https://render.com)
+                      - Node.js web service hosting
+  Database Hosting  : MongoDB Atlas (Cloud-managed MongoDB)
+
+F) OPERATING SYSTEM (Development):
+------------------------------------
+  - Windows 10/11 (Development environment used)
+  - Compatible with macOS and Linux for development
+
+G) BROWSER COMPATIBILITY:
+--------------------------
+  - Google Chrome (Recommended)
+  - Mozilla Firefox
+  - Microsoft Edge
+  - Safari (macOS)
+  All modern browsers supporting ES6+ JavaScript.
+
+H) NETWORK REQUIREMENTS:
+--------------------------
+  - Stable internet connection required (cloud-hosted application)
+  - HTTPS secured communication between client, server, and database
+  - REST API communication between frontend and backend
+
+
+--------------------------------------------------------------------------------
+3. HARDWARE REQUIREMENTS
+--------------------------------------------------------------------------------
+
+A) FOR END USERS (Accessing the Web Application):
+--------------------------------------------------
+
+  Minimum Requirements:
+  ----------------------
+  Processor       : Intel Core i3 / AMD equivalent (1.5 GHz or higher)
+  RAM             : 2 GB
+  Storage         : 500 MB free disk space (for browser cache)
+  Display         : 1024 x 768 screen resolution
+  Internet        : Broadband connection (1 Mbps or above)
+  Input Devices   : Keyboard, Mouse
+  Browser         : Any modern browser with JavaScript enabled
+
+  Recommended Requirements:
+  -------------------------
+  Processor       : Intel Core i5 / AMD Ryzen 5 (2.0 GHz or higher)
+  RAM             : 4 GB or more
+  Storage         : 1 GB free disk space
+  Display         : 1280 x 720 or higher (Full HD preferred)
+  Internet        : Broadband connection (5 Mbps or above)
+  Input Devices   : Keyboard, Mouse, Barcode Scanner (USB/Bluetooth)
+  Browser         : Google Chrome (latest version)
+
+  Optional Hardware:
+  ------------------
+  - USB/Bluetooth Barcode Scanner (for Barcode scanning module)
+  - Thermal Printer or Regular Printer (for bill/invoice printing)
+  - Touch Screen Display (for POS/Sell module usage)
+
+B) FOR DEVELOPERS (Development Environment):
+---------------------------------------------
+
+  Minimum Requirements:
+  ----------------------
+  Processor       : Intel Core i5 / AMD Ryzen 5 (2.0 GHz or higher)
+  RAM             : 8 GB
+  Storage         : 5 GB free disk space (for project + node_modules)
+  Display         : 1366 x 768 screen resolution
+  Internet        : Broadband connection (5 Mbps or above)
+  OS              : Windows 10 / macOS / Linux (Ubuntu 20.04+)
+
+  Recommended Requirements:
+  -------------------------
+  Processor       : Intel Core i7 / AMD Ryzen 7 (3.0 GHz or higher)
+  RAM             : 16 GB
+  Storage         : SSD with 10 GB free space
+  Display         : 1920 x 1080 (Full HD) or higher
+  Internet        : Broadband connection (10 Mbps or above)
+  OS              : Windows 11 / macOS / Linux
+
+C) FOR SERVER (Backend Deployment - Render.com):
+-------------------------------------------------
+  The backend is hosted on Render.com (cloud infrastructure).
+  Render manages the underlying hardware automatically.
+
+  Logical/Virtual Server Specs (as provided by Render free tier):
+  ----------------------------------------------------------------
+  CPU             : Shared CPU (fractional)
+  RAM             : 512 MB (Free tier)
+  Storage         : Ephemeral (temporary) file storage
+  Network         : HTTPS with SSL/TLS certificate (auto-managed)
+  OS              : Linux (Ubuntu-based container)
+
+  Scaling         : Render supports auto-scaling on paid plans.
+
+D) FOR DATABASE (MongoDB Atlas - Cloud):
+-----------------------------------------
+  Database is cloud-hosted on MongoDB Atlas.
+  No dedicated hardware required from the developer/user side.
+
+  MongoDB Atlas Free Tier (M0 Cluster):
+  --------------------------------------
+  Storage         : 512 MB Shared Storage
+  RAM             : Shared
+  Connections     : Up to 500 concurrent connections
+  Network         : Global clusters with encrypted connections (TLS/SSL)
+  Backup          : Automated backups on M10+ clusters
+
+
+--------------------------------------------------------------------------------
+4. API ENDPOINTS SUMMARY
+--------------------------------------------------------------------------------
+
+  Base URL (Backend): https://supplysync-backend.onrender.com
+
+  /api/auth          - User Registration & Login (JWT Authentication)
+  /api/users         - User Management (Admin only)
+  /api/products      - Product CRUD operations (Inventory)
+  /api/barcode       - Barcode lookup and product identification
+  /api/suppliers     - Supplier information management
+  /api/sales         - Sales creation and retrieval
+  /api/dashboard     - Dashboard summary statistics
+  /api/forecast      - Demand forecasting data
+  /api/recommendations - Restocking recommendations
+  /api/alerts        - Low-stock and out-of-stock alerts
+  /api/gst           - GST rate configuration
+  /api/bill-charges  - Custom billing charges
+  /api/settings      - Shop settings and profile
+  /api/health        - Server health check
+
+
+--------------------------------------------------------------------------------
+5. TECHNOLOGY STACK SUMMARY (Quick Reference)
+--------------------------------------------------------------------------------
+
+  Layer           Technology              Version
+  ----------      --------------------    ----------
+  Frontend        React.js + TypeScript   18.3.1 / 5.8.3
+  Build Tool      Vite                    5.4.19
+  Styling         Tailwind CSS            3.4.17
+  Backend         Node.js + Express.js    LTS / 4.18.2
+  Database        MongoDB (Atlas)         Cloud
+  Auth            JWT + bcryptjs          9.0.2 / 2.4.3
+  Hosting (FE)    Vercel                  -
+  Hosting (BE)    Render                  -
+  Testing         Vitest + Playwright     3.2.4 / 1.57.0
+  Version Control Git + GitHub            -
+
+
+================================================================================
+                              END OF DOCUMENT
+================================================================================
