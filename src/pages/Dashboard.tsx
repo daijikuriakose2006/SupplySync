@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, AlertTriangle, IndianRupee, TrendingUp, ShoppingCart, ArrowUpRight, ArrowDownRight, RefreshCw } from "lucide-react";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LabelList } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { dashboardApi } from "@/lib/api";
 
@@ -139,7 +139,7 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-primary" />
-            Top Selling Products
+            Top Selling Products (This Week)
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -149,10 +149,26 @@ export default function Dashboard() {
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={topProducts} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis type="number" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => `₹${v}`} />
+                <XAxis type="number" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" tickFormatter={(v) => `${v} units`} allowDecimals={false} />
                 <YAxis type="category" dataKey="productName" width={140} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} formatter={(v: any) => [`₹${v}`, "Revenue"]} />
-                <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }}
+                  formatter={(v: any) => [`${v} units`, "Quantity Sold"]}
+                />
+                <Bar dataKey="quantity" radius={[0, 4, 4, 0]}>
+                  {topProducts.map((_: any, index: number) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={[
+                        "hsl(220 90% 55%)",
+                        "hsl(250 80% 60%)",
+                        "hsl(280 70% 60%)",
+                        "hsl(310 65% 58%)",
+                        "hsl(340 60% 58%)",
+                      ][index] || "hsl(var(--primary))"}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           )}

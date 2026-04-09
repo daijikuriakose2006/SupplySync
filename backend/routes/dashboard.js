@@ -16,10 +16,22 @@ router.get('/summary', async (req, res, next) => {
       Alert.countDocuments({ isRead: false }),
       Sale.find(),
       Sale.aggregate([
-        { $group: { _id: '$productName', totalRevenue: { $sum: '$total' }, totalQty: { $sum: '$quantity' } } },
+        {
+          $match: {
+            createdAt: {
+              $gte: (() => {
+                const d = new Date();
+                d.setDate(d.getDate() - d.getDay() + (d.getDay() === 0 ? -6 : 1)); // Monday
+                d.setHours(0, 0, 0, 0);
+                return d;
+              })()
+            }
+          }
+        },
+        { $group: { _id: '$productName', totalQty: { $sum: '$quantity' } } },
         { $sort: { totalQty: -1 } },
         { $limit: 5 },
-        { $project: { productName: '$_id', revenue: '$totalRevenue', quantity: '$totalQty', _id: 0 } }
+        { $project: { productName: '$_id', quantity: '$totalQty', _id: 0 } }
       ])
     ]);
 
