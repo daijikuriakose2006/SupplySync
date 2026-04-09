@@ -17,7 +17,7 @@ router.get('/summary', async (req, res, next) => {
       Sale.find(),
       Sale.aggregate([
         { $group: { _id: '$productName', totalRevenue: { $sum: '$total' }, totalQty: { $sum: '$quantity' } } },
-        { $sort: { totalRevenue: -1 } },
+        { $sort: { totalQty: -1 } },
         { $limit: 5 },
         { $project: { productName: '$_id', revenue: '$totalRevenue', quantity: '$totalQty', _id: 0 } }
       ])
